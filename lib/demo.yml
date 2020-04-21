@@ -1,0 +1,1981 @@
+- name: Claimant Details
+  section_group: Verify Info
+  fields:
+  - name: personName
+    label: What is your name?
+    hidden: true
+    required: true
+  - name: claimReportedDate
+    type: date
+    label: Please choose todays date
+    path: Event/claimReportedDate
+    default: "<%= Time.now.to_s.slice(0..9) %>"
+    note: true
+    note_path: Event/notes
+    hidden: true
+  - name: namePrefix
+    type: select
+    options:
+    - ''
+    - Dr.
+    - Father
+    - Mr.
+    - Mrs.
+    - Ms.
+    - Rabbi
+    - Reverend
+    - Sister
+    - Attorney
+    - Professor
+    - Sir
+    label: 'Title:'
+    path: Insured/Person/personName/namePrefix
+    default: ''
+    note: true
+    note_path: Event/notes
+  - name: firstName
+    type: text
+    label: 'First Name: *'
+    path: Insured/Person/personName/firstName
+    required: true
+    default: "<%= leave_plan.user.profile.first_name %>"
+    note: true
+    note_path: Event/notes
+  - name: middleName
+    type: text
+    label: 'Middle Name:'
+    path: Insured/Person/personName/middleName
+    default: "<%= leave_plan.user.profile.middle_name %>"
+    note: true
+    note_path: Event/notes
+  - name: lastName
+    type: text
+    label: 'Last Name: *'
+    required: true
+    path: Insured/Person/personName/lastName
+    default: "<%= leave_plan.user.profile.last_name %>"
+    note: true
+    note_path: Event/notes
+  - name: nameSuffix
+    type: text
+    label: 'Suffix:'
+    path: Insured/Person/personName/nameSuffix
+    note: true
+    note_path: Event/notes
+  - name: dateOfBirth
+    type: birthdate
+    label: When were you born? *
+    required: true
+    path: Insured/Person/dateOfBirth
+    note: true
+    note_path: Event/notes
+  - name: maritalStatus
+    type: select
+    options:
+    - ''
+    - Married
+    - Single
+    - Divorced
+    - Widowed
+    - Separated
+    - Unknown
+    - Civil Union
+    - Domestic Partnership
+    label: 'Please select your marital status: *'
+    required: true
+    path: Insured/Person/maritalStatus
+    note: true
+    note_path: Event/notes
+  - name: employeeId
+    type: text
+    label: What is your employee ID? *
+    path: Insured/Employment/employee/employeeId
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'employee_id')%>"
+    hidden: true
+    note: true
+    note_path: Event/notes
+  - name: externalIdentificationType
+    type: select
+    options:
+    - ''
+    - Social Security Number
+    - Social Insurance Number
+    label: 'Please select your identifier: *'
+    required: true
+    default: Social Security Number
+    path: Insured/Person/externalIdentification/externalIdentificationType
+    note: true
+    note_path: Event/notes
+  - name: socialSecurityNumber
+    type: externalIdentificationType
+    label: 'Social Security Number (SSN): *'
+    required: true
+    dependent:
+      name: externalIdentificationType
+      value: Social Security Number
+    path: Insured/Person/externalIdentification/externalIdentification
+    note: true
+    note_path: Event/notes
+  - name: socialInsuranceNumber
+    type: externalIdentificationType
+    label: 'Social Insurance Number: *'
+    required: true
+    dependent:
+      name: externalIdentificationType
+      value: Social Insurance Number
+    path: Insured/Person/externalIdentification/externalIdentification
+    note: true
+    note_path: Event/notes
+  - name: Sex
+    label: 'Sex:'
+    type: select
+    options:
+    - ''
+    - Male
+    - Female
+    path: Insured/Person/gender
+    note: true
+    note_path: Event/notes
+- name: Contact Details
+  section_group: Verify Info
+  fields:
+  - name: addressArray
+    array: true
+    path: Insured/Address
+  - name: primaryAddress
+    label: What is your primary address?
+  - name: contactPointUsageAddress
+    type: select
+    label: contactPointUsageAddress
+    default: Primary Address
+    options:
+    - ''
+    - Other
+    - Primary Address
+    - Primary Billing
+    - Business Address
+    - Work Address
+    - Secondary Office Address
+    path: Insured/Address/0/contactPointUsage
+    note: true
+    note_path: Event/notes
+    hidden: true
+    array_element: true
+    parent_path: Insured/Address
+    element_index: 0
+  - name: addressLineOne
+    type: text
+    label: 'Address Line 1: *'
+    path: Insured/Address/0/addressLineOne
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'user_mailing_address1')%>"
+    required: true
+    note: true
+    note_path: Event/notes
+  - name: addressLineTwo
+    type: text
+    label: 'Address Line 2:'
+    path: Insured/Address/0/addressLineTwo
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'user_mailing_address2')%>"
+    required: false
+    note: true
+    note_path: Event/notes
+  - name: city
+    type: text
+    label: 'City: *'
+    required: true
+    path: Insured/Address/0/city
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'user_city')%>"
+    note: true
+    note_path: Event/notes
+  - name: region
+    type: select
+    options:
+    - AL
+    - AK
+    - AZ
+    - AR
+    - CA
+    - CO
+    - CT
+    - DE
+    - FL
+    - GA
+    - HI
+    - ID
+    - IL
+    - IN
+    - IA
+    - KS
+    - KY
+    - LA
+    - ME
+    - MD
+    - MA
+    - MI
+    - MN
+    - MS
+    - MO
+    - MT
+    - NE
+    - NV
+    - NH
+    - NJ
+    - NM
+    - NY
+    - NC
+    - ND
+    - OH
+    - OK
+    - OR
+    - PA
+    - RI
+    - SC
+    - SD
+    - TN
+    - TX
+    - UT
+    - VT
+    - VA
+    - WA
+    - WV
+    - WI
+    - WY
+    - AB
+    - BC
+    - MB
+    - NB
+    - NL
+    - NT
+    - NS
+    - NU
+    - 'ON'
+    - PE
+    - QC
+    - SK
+    - YT
+    label: 'State/Province: *'
+    path: Insured/Address/0/region
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'user_state')%>"
+    required: true
+    note: true
+    note_path: Event/notes
+  - name: postalCode
+    type: text
+    label: 'Postal/Zip Code: *'
+    path: Insured/Address/0/postalCode
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'user_zip')%>"
+    required: true
+    note: true
+    note_path: Event/notes
+  - name: country
+    label: 'Country: *'
+    type: select
+    options:
+    - ''
+    - US
+    - Canada
+    required: true
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'mailingCountry')%>"
+    path: Insured/Address/0/country
+    note: true
+    note_path: Event/notes
+  - name: telephoneNumberArray
+    array: true
+    path: Insured/TelephoneNumber
+  - name: contactPointUsagePhone
+    type: select
+    label: 'Phone Number Type: *'
+    options:
+    - ''
+    - Business Telephone
+    - Home Telephone
+    - Cellular
+    - Other Telephone
+    required: true
+    default: Home Telephone
+    path: Insured/TelephoneNumber/0/contactPointUsage
+    note: true
+    note_path: Event/notes
+  - name: Telephone Number
+    type: phone
+    label: 'Phone Number: *'
+    default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'home_phone')%>"
+    placeholder: 123-456-7890
+    path: Insured/TelephoneNumber/0/telephoneNumber
+    required: true
+    note: true
+    note_path: Event/notes
+  - name: preferredLanguage
+    type: select
+    label: 'Preferred Language:'
+    options:
+    - ''
+    - English
+    - Haitian Creole
+    - Italian
+    - Korean
+    - Mandarin
+    - Other
+    - Polish
+    - Russian
+    - Spanish
+    required: true
+    path: Insured/Person/preferredLanguage
+    default: English
+    note: true
+    note_path: Event/notes
+  - name: emailAddressArray
+    array: true
+    path: Insured/ElectronicAddress
+  - name: contactPointUsageEmail
+    type: select
+    label: 'Email Address Type: '
+    options:
+    - ''
+    - Business Email
+    - Home Email
+    - Other Email
+    - Alternate Home Email
+    - Alternate Other Email
+    - Automated Correspondence
+    required: true
+    default: Home Email
+    path: Insured/ElectronicAddress/0/contactPointUsage
+    note: true
+    note_path: Event/notes
+  - name: electronicAddress
+    type: email
+    label: 'Email Address:'
+    required: true
+    placeholder: you@gmail.com
+    path: Insured/ElectronicAddress/0/electronicAddress
+    note: true
+    note_path: Event/notes
+# - name: Leave Detail
+#   section_group: Claim/Leave Request
+#   fields:
+#   - name: leaveReason
+#     type: select
+#     options:
+#     - 2nd Parent Adoption Leave (Standard)
+#     - Adoption (PFL 4 weeks late)
+#     - Adoption Leave
+#     - Adoption Leave (PFL 2 weeks late)
+#     - Adoption Leave (Redfin)
+#     - Adoption Leave (Standard)
+#     - Adoption/Foster Care Leave (California)
+#     - Adoption/Foster Care Leave (New Jersey)
+#     - Adoption/Foster Care Leave (Rhode Island)
+#     - Adoption/Foster Care Leave (Standard)
+#     - Bereavement Leave
+#     - Canadian Adoption Leave
+#     - Canadian Bereavement Leave
+#     - Canadian Family Care Leave - Adult
+#     - Canadian Family Care Leave - Child
+#     - Canadian Leave Related to the Death of a Child
+#     - Canadian Maternity Leave
+#     - Canadian Parental Leave
+#     - Canadian Reservist Leave
+#     - Canadian Sick Leave
+#     - Domestic Partner Family Care Leave
+#     - Eldercare Leave
+#     - Family Care Leave
+#     - Family Caregiver Leave (2 weeks late)
+#     - Foster Care (PFL 2 weeks late)
+#     - Foster Care (PFL 4 weeks late)
+#     - Foster Care (Redfin)
+#     - Foster Care Leave
+#     - Maternity Leave (California)
+#     - Maternity Leave (Marvell California)
+#     - Maternity Leave (Marvell outside California)
+#     - Maternity Leave (New Jersey)
+#     - Maternity Leave (P66)
+#     - Maternity Leave (PFL 2 weeks late)
+#     - Maternity Leave (PFL 4 weeks late)
+#     - Maternity Leave (Redfin)
+#     - Maternity Leave (Rhode Island)
+#     - Maternity Leave (Standard)
+#     - Maternity Leave (Udemy)
+#     - Maternity Leave  for Flight Crew
+#     - Maternity Leave without disability insurance
+#     - Military Active Duty Leave
+#     - Military Caregiver Leave
+#     - Military Caregiver Leave (2 weeks late)
+#     - Military Exigency (2 weeks late)
+#     - Military Exigency Leave
+#     - Military Reserve Duty Leave
+#     - Parental Leave (California)
+#     - Parental Leave (New Jersey)
+#     - Parental Leave (PFL 2 weeks late)
+#     - Parental Leave (PFL 4 weeks late)
+#     - Parental Leave (Redfin)
+#     - Parental Leave (Rhode Island)
+#     - Parental Leave (Standard)
+#     - Personal Leave
+#     - Personal Medical Leave
+#     - Safe Leave
+#     value_mapper:
+#       2nd Parent Adoption Leave (Standard): Adoption
+#       Adoption (PFL 4 weeks late): Adoption
+#       Adoption Leave (Redfin): Adoption
+#       Adoption Leave (Standard): Adoption
+#       Adoption Leave: Adoption
+#       Adoption Leave (PFL 2 weeks late): Adoption
+#       Adoption/Foster Care Leave (California): Adoption
+#       Adoption/Foster Care Leave (New Jersey): Adoption
+#       Adoption/Foster Care Leave (Rhode Island): Adoption
+#       Adoption/Foster Care Leave (Standard): Adoption
+#       Bereavement Leave: Bereavement
+#       Canadian Adoption Leave: Adoption
+#       Canadian Bereavement Leave: Bereavement
+#       Canadian Family Care Leave - Adult: Relative Health
+#       Canadian Family Care Leave - Child: Child Health
+#       Canadian Leave Related to the Death of a Child: Bereavement
+#       Canadian Maternity Leave: Pregnancy-Related
+#       Canadian Parental Leave: Newborn Paternity
+#       Canadian Reservist Leave: Military
+#       Canadian Sick Leave: EE Health
+#       Domestic Partner Family Care Leave: Spouse Health
+#       Eldercare Leave: Relative Health
+#       Family Care Leave: Relative Health
+#       Family Caregiver Leave (2 weeks late): Relative Health
+#       Foster Care (PFL 2 weeks late): Foster Care
+#       Foster Care (PFL 4 weeks late): Foster Care
+#       Foster Care (Redfin): Foster Care
+#       Foster Care Leave: Foster Care
+#       Maternity Leave (California): Pregnancy-Related
+#       Maternity Leave (Marvell California): Pregnancy-Related
+#       Maternity Leave (Marvell outside California): Pregnancy-Related
+#       Maternity Leave (New Jersey): Pregnancy-Related
+#       Maternity Leave (P66): Pregnancy-Related
+#       Maternity Leave (PFL 2 weeks late): Pregnancy-Related
+#       Maternity Leave (PFL 4 weeks late): Pregnancy-Related
+#       Maternity Leave (Redfin): Pregnancy-Related
+#       Maternity Leave (Rhode Island): Pregnancy-Related
+#       Maternity Leave (Standard): Pregnancy-Related
+#       Maternity Leave (Udemy): Pregnancy-Related
+#       Maternity Leave  for Flight Crew: Pregnancy-Related
+#       Maternity Leave without disability insurance: Pregnancy-Related
+#       Military Active Duty Leave: Military
+#       Military Caregiver Leave: Military Caregiver
+#       Military Caregiver Leave (2 weeks late): Military Caregiver
+#       Military Exigency (2 weeks late): Military
+#       Military Exigency Leave: Family Military
+#       Military Reserve Duty Leave: Military
+#       Parental Leave (California): Newborn Paternity
+#       Parental Leave (New Jersey): Newborn Paternity
+#       Parental Leave (PFL 2 weeks late): Newborn Paternity
+#       Parental Leave (PFL 4 weeks late): Newborn Paternity
+#       Parental Leave (Redfin): Newborn Paternity
+#       Parental Leave (Rhode Island): Newborn Paternity
+#       Parental Leave (Standard): Newborn Paternity
+#       Personal Leave: Extended Personal
+#       Personal Medical Leave: EE Health
+#       Safe Leave: Domestic Violence
+#     label: What is the reason for your absence? *
+#     path: Event/leave/leaveReason
+#     required: true
+#     hidden: true
+#     readonly: true
+#     default: "<%= leave_plan.leave_scenario.name %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: pregnancyArray
+#     array: true
+#     path: Event/pregnancy
+#     dependent:
+#       name: leaveReason
+#       value: Pregnancy-Related
+#   - name: babyDelivered
+#     type: select
+#     label: Is baby already born? *
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     dependent:
+#       name: leaveReason
+#       value: Pregnancy-Related
+#     path: Event/babyDelivered
+#     default: ''
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: actualDeliveryDate
+#     type: date
+#     label: When was baby born? *
+#     dependent:
+#       name: babyDelivered
+#       value: 'Yes'
+#     path: Event/pregnancy/0/actualDeliveryDate
+#     default: "<%= leave_plan.milestone_dates['2'] %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: expectedDeliveryDate
+#     type: date
+#     label: What is the estimated delivery date? *
+#     dependent:
+#       name: babyDelivered
+#       value: 'No'
+#     path: Event/pregnancy/0/expectedDeliveryDate
+#     default: "<%= leave_plan.milestone_dates['1'] %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: parentalBabyDelivered
+#     type: select
+#     label: Is baby already born? *
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     dependent:
+#       name: leaveReason
+#       value: Newborn Paternity
+#     default: ''
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: parentalActualDeliveryDate
+#     type: date
+#     label: When was baby born? *
+#     dependent:
+#       name: parentalBabyDelivered
+#       value: 'Yes'
+#     default: "<%= leave_plan.milestone_dates['2'] %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: parentalExpectedDeliveryDate
+#     type: date
+#     label: What is the estimated delivery date? *
+#     dependent:
+#       name: parentalBabyDelivered
+#       value: 'No'
+#     default: "<%= leave_plan.milestone_dates['1'] %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: hasChildBeenPlaced
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Has the child been placed in your care?
+#     required: true
+#     dependent:
+#       name: leaveReason
+#       value: Adoption
+#     note: true
+#     note_path: Event/notes
+#   - name: dateOfPlacement
+#     type: date
+#     label: When was the child placed in your care?
+#     required: true
+#     dependent:
+#       name: hasChildBeenPlaced
+#       value: 'Yes'
+#     default: "<%= leave_plan.milestone_dates['2'] %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: expectedDateOfPlacement
+#     type: date
+#     label: When do you expect the child will be placed in your care?
+#     required: true
+#     dependent:
+#       name: hasChildBeenPlaced
+#       value: 'No'
+#     default: "<%= leave_plan.milestone_dates['1'] %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: childsName
+#     type: text
+#     label: 'Child''s Name: '
+#     dependent:
+#       name: hasChildBeenPlaced
+#       value: 'Yes'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: childsDOB
+#     type: date
+#     label: 'Child''s Date of Birth:'
+#     dependent:
+#       name: hasChildBeenPlaced
+#       value: 'Yes'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: nameOfBereaved
+#     type: text
+#     label: 'Name of Bereaved:'
+#     dependent:
+#       name: leaveReason
+#       value: Bereavement
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: dateBereaved
+#     type: date
+#     label: 'Date of Death:'
+#     dependent:
+#       name: leaveReason
+#       value: Bereavement
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: relationshipToBereaved
+#     type: select
+#     options:
+#     - ''
+#     - Parent
+#     - Grandparent
+#     - Spouse
+#     - Child
+#     - Other
+#     label: 'Relationship to Bereaved:'
+#     dependent:
+#       name: leaveReason
+#       value: Bereavement
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: relationshipToBereavedOther
+#     type: text
+#     label: 'Please describe relationship:'
+#     dependent:
+#       name: relationshipToBereaved
+#       value: Other
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForName_RelativeHealth
+#     type: text
+#     label: 'Name of Individual Cared For:'
+#     dependent:
+#       name: leaveReason
+#       value: Relative Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForDOB_RelativeHealth
+#     type: date
+#     label: 'Date of Birth:'
+#     dependent:
+#       name: leaveReason
+#       value: Relative Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#     rules:
+#     - max_date: "<%= 1.year.ago %>"
+#       message: Birthdate should be at least one year in the past.
+#   - name: caredForRelationship_RelativeHealth
+#     type: select
+#     options:
+#     - ''
+#     - Parent
+#     - Grandparent
+#     - Spouse
+#     - Child
+#     - Other
+#     label: 'Relationship to Individual Cared For:'
+#     dependent:
+#       name: leaveReason
+#       value: Relative Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForRelationshipOther_RelativeHealth
+#     type: text
+#     label: 'Please describe relationship:'
+#     dependent:
+#       name: caredForRelationship_RelativeHealth
+#       value: Other
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForName_SpouseHealth
+#     type: text
+#     label: 'Name of Individual Cared For:'
+#     dependent:
+#       name: leaveReason
+#       value: Spouse Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForDOB_SpouseHealth
+#     type: date
+#     label: 'Date of Birth:'
+#     dependent:
+#       name: leaveReason
+#       value: Spouse Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForRelationship_SpouseHealth
+#     type: select
+#     options:
+#     - ''
+#     - Parent
+#     - Grandparent
+#     - Spouse
+#     - Child
+#     - Other
+#     label: 'Relationship to Individual Cared For:'
+#     dependent:
+#       name: leaveReason
+#       value: Spouse Health
+#     required: true
+#     default: Spouse
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForRelationshipOther_SpouseHealth
+#     type: text
+#     label: 'Please describe relationship:'
+#     dependent:
+#       name: caredForRelationship_SpouseHealth
+#       value: Other
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForName_ChildHealth
+#     type: text
+#     label: 'Name of Individual Cared For:'
+#     dependent:
+#       name: leaveReason
+#       value: Child Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForDOB_ChildHealth
+#     type: date
+#     label: 'Date of Birth:'
+#     dependent:
+#       name: leaveReason
+#       value: Child Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForRelationship_ChildHealth
+#     type: select
+#     options:
+#     - ''
+#     - Parent
+#     - Grandparent
+#     - Spouse
+#     - Child
+#     - Other
+#     label: 'Relationship to Individual Cared For:'
+#     dependent:
+#       name: leaveReason
+#       value: Child Health
+#     required: true
+#     default: Child
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForRelationshipOther_ChildHealth
+#     type: text
+#     label: 'Please describe relationship:'
+#     dependent:
+#       name: caredForRelationship_ChildHealth
+#       value: Other
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForName_MilitaryCareGiver
+#     type: text
+#     label: 'Name of Individual Cared For:'
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForDOB_MilitaryCareGiver
+#     type: date
+#     label: 'Date of Birth:'
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForRelationship_MilitaryCareGiver
+#     type: select
+#     options:
+#     - ''
+#     - Parent
+#     - Grandparent
+#     - Spouse
+#     - Child
+#     - Other
+#     label: 'Relationship to Individual Cared For: *'
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForRelationshipOther_MilitaryCareGiver
+#     type: text
+#     label: 'Please describe relationship:'
+#     dependent:
+#       name: caredForRelationship_MilitaryCareGiver
+#       value: Other
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForMedicalCategory_MilitaryCareGiver
+#     type: select
+#     options:
+#     - Childcare/School Activities
+#     - Counseling
+#     - Financial Arrangements
+#     - Injury/Illness
+#     - Legal Arrangements
+#     - Military Events
+#     - Other
+#     - Post-Deployment Activities
+#     - Rest/Recuperation
+#     - Short Notice Deployment
+#     - Other
+#     label: 'Please select reason for care:'
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: caredForMedicalCategoryOther_MilitaryCareGiver
+#     type: text
+#     label: 'Please describe reason for care:'
+#     dependent:
+#       name: caredForMedicalCategory_MilitaryCareGiver
+#       value: Other
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverType
+#     type: text
+#     label: What is the reason for your leave?
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverDetails
+#     type: text
+#     label: 'Details:'
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverRelationship
+#     type: select
+#     options:
+#     - ''
+#     - Parent
+#     - Grandparent
+#     - Spouse
+#     - Child
+#     - Other
+#     label: What is your relationship to your military family member?
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverRelationshipOther
+#     type: text
+#     label: Please describe your relationship to military family member?
+#     dependent:
+#       name: militaryCaregiverRelationship
+#       value: Other
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverNameOfMilitary
+#     type: text
+#     label: 'Name of Member of Military:'
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverCurrentForcesMember
+#     type: select
+#     label: Current Member of Armed Forces?
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverDischargeDate
+#     type: date
+#     label: What was the discharge date?
+#     dependent:
+#       name: militaryCaregiverCurrentForcesMember
+#       value: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCaregiverFirstAbsenceDate
+#     type: date
+#     label: When do you expect to first miss work?
+#     dependent:
+#       name: leaveReason
+#       value: Military Caregiver
+#     default: "<%= leave_plan.leave_start_date %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryType
+#     type: text
+#     label: What is the reason for your leave?
+#     dependent:
+#       name: leaveReason
+#       value: Military
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryDetails
+#     type: text
+#     label: 'Details:'
+#     dependent:
+#       name: leaveReason
+#       value: Military
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryInjuredInCombat
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Have you been injured in active duty?
+#     dependent:
+#       name: leaveReason
+#       value: Military
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryCurrentForcesMember
+#     type: checkbox
+#     label: Are you a current member of the Armed Forces?
+#     dependent:
+#       name: leaveReason
+#       value: Military
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryDischargeDate
+#     type: date
+#     label: What was your discharge date?
+#     dependent:
+#       name: militaryCurrentForcesMember
+#       value: false
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: militaryFirstAbsenceDate
+#     type: date
+#     label: When do you expect to first miss work?
+#     default: "<%= leave_plan.leave_start_date %>"
+#     dependent:
+#       name: leaveReason
+#       value: Military
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: disabilityEventType
+#     type: select
+#     label: Which best describes the reason you are missing work?
+#     options:
+#     - ''
+#     - Injury
+#     - Illness
+#     required: true
+#     dependent:
+#       name: leaveReason
+#       value: EE Health
+#     default: Injury
+#     path: Event/leave/disabilityEventType
+#     note: true
+#     note_path: Event/notes
+#   - name: injuryInVehicleAccident
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Is your condition the result of a vehicle accident? *
+#     required: true
+#     dependent:
+#       name: disabilityEventType
+#       value: Injury
+#     default: ''
+#     path: Event/leave/vehicleAccident
+#     note: true
+#     note_path: Event/notes
+#   - name: injuryInVehicleAccidentDate
+#     type: date
+#     label: What was the date of the accident? *
+#     dependent:
+#       name: injuryInVehicleAccident
+#       value: 'Yes'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: injuryInVehicleAccidentDetails
+#     type: text
+#     label: How did this accident/injury occur? *
+#     required: true
+#     dependent:
+#       name: injuryInVehicleAccident
+#       value: 'No'
+#     default: ''
+#     note: true
+#     note_path: Event/notes
+#   - name: injuryIsWorkRelated
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Is this accident or illness related to your work? *
+#     required: true
+#     dependent:
+#       name: leaveReason
+#       value: EE Health
+#     default: 'No'
+#     note: true
+#     note_path: Event/notes
+#   - name: workersCompClaimFiled
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Have you, or are you, in the process of filing a workers' compensation
+#       claim? *
+#     required: true
+#     dependent:
+#       name: injuryIsWorkRelated
+#       value: 'Yes'
+#       default: ''
+#     note: true
+#     note_path: Event/notes
+#   - name: workersCompClaimFiledDetails
+#     type: text
+#     label: 'Please provide any details you have about your claim:'
+#     dependent:
+#       name: workersCompClaimFiled
+#       value: 'Yes'
+#       default: ''
+#     note: true
+#     note_path: Event/notes
+#   - name: leaveStartDate
+#     label: What is your leave start date? *
+#     type: date
+#     path: Event/leave/leaveStartDate
+#     default: "<%= leave_plan.leave_start_date %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: surgeryRequired
+#     label: Did you/will you require a surgery or procedure? *
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     dependent:
+#       name: leaveReason
+#       value: EE Health
+#     default: ''
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: surgeryDate
+#     label: Please provide the date of the surgery or procedure
+#     type: date
+#     dependent:
+#       name: surgeryRequired
+#       value: 'Yes'
+#     default: ''
+#     required: false
+#     note: true
+#     note_path: Event/notes
+#   - name: surgeryDescription
+#     label: What kind of surgery or procedure?
+#     type: text
+#     dependent:
+#       name: surgeryRequired
+#       value: 'Yes'
+#     required: false
+#     note: true
+#     note_path: Event/notes
+#   - name: surgeryType
+#     label: Was/will it be open or laparoscopic?
+#     type: select
+#     dependent:
+#       name: surgeryRequired
+#       value: 'Yes'
+#     options:
+#     - ''
+#     - Open
+#     - Laparoscopic
+#     default: ''
+#     required: false
+#     note: true
+#     note_path: Event/notes
+#   - name: conditionDiagnosisLineBreak
+#     label: ''
+#   - name: conditionDescription
+#     label: Can you please describe your symptoms/condition/diagnosis in layman's terms?
+#       *
+#     dependent:
+#       name: leaveReason
+#       value: EE Health
+#     type: text
+#     helper_text: Please provide details about your condition so that we can understand
+#       your circumstances
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: conditionFirstTreatmentDate
+#     label: Date of first treatment for this condition? *
+#     type: date
+#     dependent:
+#       name: leaveReason
+#       value: EE Health
+#     default: ''
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: conditionNextTreatmentDate
+#     label: Date of next treatment for this condition?
+#     dependent:
+#       name: leaveReason
+#       value: EE Health
+#     type: date
+#     default: ''
+#     required: false
+#     note: true
+#     note_path: Event/notes
+# - name: Leave Schedule
+#   section_group: Claim/Leave Request
+#   fields:
+#   - name: leaveScheduleType
+#     type: select
+#     options:
+#     - ''
+#     - - All at once
+#       - Continuous
+#     - - Working a reduced schedule (less hours)
+#       - Reduced
+#     - - Intermittent Absences
+#       - Intermittent
+#     label: How will you be taking your time off? *
+#     helper_text: Choose <b>All at once</b> if you will be off work for a continuous
+#       period of time.</p> Choose <b>Working a reduced schedule (less hours)</b> if
+#       you will be continuing to work but at fewer hours per week such as a change
+#       from full-time to part-time.</p>Choose <b>Intermittent Absences</b> if you will
+#       be continuing to work but may have absences that are planned or unexpected.
+#     path: Event/leave/leaveScheduleType
+#     default: Continuous
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: reducedScheduleHoursOffPerWeek
+#     type: number
+#     label: How many hours will you be missing per week?
+#     path: Event/leave/reducedScheduleHoursOffPerWeek
+#     default: '0'
+#     dependent:
+#       name: leaveScheduleType
+#       value: Reduced
+#     note: true
+#     note_path: Event/notes
+#   - name: eventDate
+#     type: date
+#     label: What was the last day you were or are planning to be physically at work?
+#       *
+#     path: Event/eventDate
+#     default: "<%= leave_plan.leave_start_date %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: workedFullLastDay
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Did you / will you work a full day your last day at work?
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: workedFullLastDayDetails
+#     type: text
+#     dependent:
+#       name: workedFullLastDay
+#       value: 'No'
+#     label: 'Please describe any changes in schedule your last day at work: '
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: residentStateLastDayWorked
+#     type: select
+#     options:
+#     - AL
+#     - AK
+#     - AZ
+#     - AR
+#     - CA
+#     - CO
+#     - CT
+#     - DE
+#     - FL
+#     - GA
+#     - HI
+#     - ID
+#     - IL
+#     - IN
+#     - IA
+#     - KS
+#     - KY
+#     - LA
+#     - ME
+#     - MD
+#     - MA
+#     - MI
+#     - MN
+#     - MS
+#     - MO
+#     - MT
+#     - NE
+#     - NV
+#     - NH
+#     - NJ
+#     - NM
+#     - NY
+#     - NC
+#     - ND
+#     - OH
+#     - OK
+#     - OR
+#     - PA
+#     - RI
+#     - SC
+#     - SD
+#     - TN
+#     - TX
+#     - UT
+#     - VT
+#     - VA
+#     - WA
+#     - WV
+#     - WI
+#     - WY
+#     - AB
+#     - BC
+#     - MB
+#     - NB
+#     - NL
+#     - NT
+#     - NS
+#     - NU
+#     - 'ON'
+#     - PE
+#     - QC
+#     - SK
+#     - YT
+#     label: In what state were you resident on your last day worked?
+#     path: Event/residentStateLastDayWorked
+#     default: "<%= leave_plan.employee.external_hr_record&.hr_record_payload.try(:[],'user_state')%>"
+#     note: true
+#     note_path: Event/notes
+#   - name: currentlyOnLeave
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Are you currently on leave?
+#     default: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: returnToWorkDate_
+#     type: date
+#     label: When do you expect to return to work?
+#     path: Event/returnToWorkDate
+#     default: "<%= leave_plan.leave_end_date %>"
+#     dependent:
+#       name: currentlyOnLeave
+#       value: 'Yes'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: hasReturnedToWork
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Have you completed your leave and returned to work?
+#     dependent:
+#       name: currentlyOnLeave
+#       value: 'No'
+#     required: true
+#     default: 'No'
+#     note: true
+#     note_path: Event/notes
+#   - name: returnToWorkDate
+#     type: date
+#     label: When do you expect to return to work?
+#     path: Event/returnToWorkDate
+#     default: "<%= leave_plan.leave_end_date %>"
+#     dependent:
+#       name: hasReturnedToWork
+#       value: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: returnedAndWorkingFullTime
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Have you returned to working full time?
+#     dependent:
+#       name: hasReturnedToWork
+#       value: 'Yes'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: returnedWorkingScheduleDetails
+#     type: text
+#     label: Please describe how your schedule is different from your normal schedule.
+#     dependent:
+#       name: returnedAndWorkingFullTime
+#       value: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: jobRequiresWalkingMoreThanThirdOfShift
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Does your job require you to walk more than one third of your shift? *
+#     dependent:
+#       and:
+#       - name: leaveScheduleType
+#         value: Intermittent
+#       - name: leaveReason
+#         value: EE Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: jobRequiresLiftingMoreThan20Pounds
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Does your job require you to lift more than 20 pounds? *
+#     dependent:
+#       and:
+#       - name: leaveScheduleType
+#         value: Intermittent
+#       - name: leaveReason
+#         value: EE Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: jobRequiresSittingMoreThanSixHours
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Does your job require you to sit for 6 or more hours of your shift? *
+#     dependent:
+#       and:
+#       - name: leaveScheduleType
+#         value: Intermittent
+#       - name: leaveReason
+#         value: EE Health
+#     required: true
+#     note: true
+#     note_path: Event/notes
+# - name: Employment Details
+#   section_group: Claim/Leave Request
+#   fields:
+#   - name: organization_sourceSystemCode
+#     type: select
+#     label: sourceSystemCode
+#     default: "<%= company_claim_configuration.source_system_code %>"
+#     options:
+#     - ''
+#     - Eligibility Feed
+#     hidden: true
+#     path: Insured/Employment/organisation/sourceSystemCode
+#     note: true
+#     note_path: Event/notes
+#   - name: organization_sourceSystemId
+#     type: text
+#     label: sourceSystemID
+#     required: true
+#     path: Insured/Employment/organisation/sourceSystemId
+#     default: "<%= company_claim_configuration.source_system_id %>"
+#     hidden: true
+#     note: true
+#     note_path: Event/notes
+#   - name: organisationName
+#     type: text
+#     label: Organization Name
+#     required: true
+#     path: Insured/Employment/organisation/organisationName
+#     default: "<%= company_claim_configuration.organization_name %>"
+#     hidden: true
+#     note: true
+#     note_path: Event/notes
+#   - name: servedInMilitaryLastYear
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Have you served in the military in the past 12 months?
+#     default: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: workedAsTemp
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Have you ever worked for the company as a temp?
+#     default: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: spouseAtSameEmployer
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Do you and your spouse work for the same employer?
+#     default: 'No'
+#     required: true
+#     dependent:
+#       name: maritalStatus
+#       value: Married
+#     note: true
+#     note_path: Event/notes
+#   - name: nameOfSpouse
+#     type: text
+#     label: 'Name:'
+#     required: true
+#     dependent:
+#       name: spouseAtSameEmployer
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: ssnOfSpouse
+#     type: text
+#     label: 'Spouse''s Social Security Number (SSN):'
+#     required: true
+#     dependent:
+#       name: spouseAtSameEmployer
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: identificationNumberSpouse
+#     type: text
+#     label: 'Spouse Social Security or Social Insurance Number: *'
+#     required: true
+#     dependent:
+#       name: spouseAtSameEmployer
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: secondEmployer
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Are you employed by any other employer?
+#     default: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: secondEmployerName
+#     type: text
+#     label: 'Employer Name: '
+#     dependent:
+#       name: secondEmployer
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: secondEmployerContactName
+#     type: text
+#     label: 'Name of person to contact at employer:'
+#     dependent:
+#       name: secondEmployer
+#       value: 'Yes'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: secondEmployerContactNumber
+#     type: text
+#     label: 'Phone Number of contact: '
+#     dependent:
+#       name: secondEmployer
+#       value: 'Yes'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: breakInEmployment
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Have you had a break in your employment with your current employer in the
+#       past 12 months? *
+#     default: ''
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: otherIncomeWhileOnDisability
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: While out on disability will you be receiving any other income?
+#     default: 'No'
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: workLocationState
+#     type: select
+#     options:
+#     - AL
+#     - AK
+#     - AZ
+#     - AR
+#     - CA
+#     - CO
+#     - CT
+#     - DE
+#     - FL
+#     - GA
+#     - HI
+#     - ID
+#     - IL
+#     - IN
+#     - IA
+#     - KS
+#     - KY
+#     - LA
+#     - ME
+#     - MD
+#     - MA
+#     - MI
+#     - MN
+#     - MS
+#     - MO
+#     - MT
+#     - NE
+#     - NV
+#     - NH
+#     - NJ
+#     - NM
+#     - NY
+#     - NC
+#     - ND
+#     - OH
+#     - OK
+#     - OR
+#     - PA
+#     - RI
+#     - SC
+#     - SD
+#     - TN
+#     - TX
+#     - UT
+#     - VT
+#     - VA
+#     - WA
+#     - WV
+#     - WI
+#     - WY
+#     - AB
+#     - BC
+#     - MB
+#     - NB
+#     - NL
+#     - NT
+#     - NS
+#     - NU
+#     - 'ON'
+#     - PE
+#     - QC
+#     - SK
+#     - YT
+#     label: What state do you work in?
+#     path: Insured/Employment/employee/workLocationState
+#     default: "<%= leave_plan.employee.office.leave_location.admin_code_1 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: daysWorked
+#     label: What days do you normally work? *
+#     note: true
+#     note_path: Event/notes
+#   - name: scheduleArray
+#     array: true
+#     path: Insured/Employment/schedule
+#   - name: workOnMondayIndicator
+#     type: checkbox
+#     label: Monday
+#     path: Insured/Employment/schedule/0/workOnMondayIndicator
+#     default: "<%= leave_plan.employee_setting.hours_per_day['mon'].to_i > 0 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: workOnTuesdayIndicator
+#     type: checkbox
+#     label: Tuesday
+#     path: Insured/Employment/schedule/0/workOnTuesdayIndicator
+#     default: "<%= leave_plan.employee_setting.hours_per_day['tue'].to_i > 0 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: workOnWednesdayIndicator
+#     type: checkbox
+#     label: Wednesday
+#     path: Insured/Employment/schedule/0/workOnWednesdayIndicator
+#     default: "<%= leave_plan.employee_setting.hours_per_day['wed'].to_i > 0 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: workOnThursdayIndicator
+#     type: checkbox
+#     label: Thursday
+#     path: Insured/Employment/schedule/0/workOnThursdayIndicator
+#     default: "<%= leave_plan.employee_setting.hours_per_day['thu'].to_i > 0 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: workOnFridayIndicator
+#     type: checkbox
+#     label: Friday
+#     path: Insured/Employment/schedule/0/workOnFridayIndicator
+#     default: "<%= leave_plan.employee_setting.hours_per_day['fri'].to_i > 0 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: workOnSaturdayIndicator
+#     type: checkbox
+#     label: Saturday
+#     path: Insured/Employment/schedule/0/workOnSaturdayIndicator
+#     default: "<%= leave_plan.employee_setting.hours_per_day['sat'].to_i > 0 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: workOnSundayIndicator
+#     type: checkbox
+#     label: Sunday
+#     path: Insured/Employment/schedule/0/workOnSundayIndicator
+#     default: "<%= leave_plan.employee_setting.hours_per_day['sun'].to_i > 0 %>"
+#     note: true
+#     note_path: Event/notes
+#   - name: hoursPerWeek
+#     type: number
+#     label: How many hours do you work per week (on average)? *
+#     path: Insured/Employment/schedule/0/hoursPerWeek
+#     default: "<%= leave_plan.employee_setting.standard_hours_per_week.to_i %>"
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: doesScheduleVary
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Does your work schedule vary? *
+#     path: Insured/Employment/schedule/0/variableWorkSchedule
+#     default: ''
+#     required: true
+#     note: true
+#     note_path: Event/notes
+# - name: Final Details
+#   section_group: Claim/Leave Request
+#   fields:
+#   - name: healthInsuranceProvider
+#     type: select
+#     options:
+#     - ''
+#     - Accordant
+#     - Aetna
+#     - Alere
+#     - Anthem Life Ins. Co.
+#     - Best Doctors
+#     - BCMA
+#     - BCBS
+#     - BCBS of FL
+#     - BCBS of IL
+#     - BCBS of MA
+#     - BCBS of MI
+#     - BCBS of MN
+#     - BCBS of NC
+#     - BCBS of NJ
+#     - BCBS of TX
+#     - Ceridian
+#     - Cigna
+#     - Club Zero
+#     - Coventry
+#     - Express Scripts
+#     - Health Net
+#     - Health New England
+#     - Health Partners
+#     - Highmark Life Ins Co
+#     - Horizon DM
+#     - Humana Insurance Co
+#     - HCSC
+#     - HIP
+#     - Independence BC
+#     - Kaiser Permanente
+#     - Kersh Health
+#     - Lifescope
+#     - Lifeworks
+#     - Mercer Health Advantage
+#     - No Coverage
+#     - Ohio State Univ. Health Plan
+#     - Optima
+#     - Optum
+#     - Other
+#     - Pinnacle Care
+#     - Principal-Healthy Connect Prog
+#     - Quantum Health
+#     - Redbrick Health
+#     - United Healthcare Insurance Co
+#     - Unum
+#     - Value Options
+#     - Wellpoint
+#     label: Who is your health/medical insurance provider?
+#     note: true
+#     note_path: Event/notes
+#   - name: authorizeThirdParties
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Would you like to authorize Unum to speak with anyone else regarding your
+#       claim?
+#     required: true
+#     note: true
+#     note_path: Event/notes
+#   - name: authorizedParty_1_Name
+#     type: text
+#     label: 'Authorized Party Name:'
+#     dependent:
+#       name: authorizeThirdParties
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: authorizedParty_1_Relationship
+#     type: select
+#     options:
+#     - ''
+#     - Spouse
+#     - Mother
+#     - Father
+#     - Grandparent
+#     - Child
+#     - Caregiver
+#     - Partner
+#     - Other
+#     label: 'Relationship to you:'
+#     dependent:
+#       name: authorizeThirdParties
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: authorizedParty_1_Comments
+#     type: text
+#     label: 'Comments:'
+#     dependent:
+#       name: authorizeThirdParties
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProviderInformation
+#     type: select
+#     options:
+#     - ''
+#     - 'Yes'
+#     - 'No'
+#     label: Would you like to speed up Unum's review of your request?
+#   - name: medicalProviderInformationProvided
+#     label: Fill out the contact information for the medical provider who is managing
+#       your care below!
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#   - name: medicalProvider_FirstName
+#     type: text
+#     label: 'First Name:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProvider_LastName
+#     type: text
+#     label: 'Last Name:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProvider_Address_City
+#     type: text
+#     label: 'City:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProvider_Address_State
+#     type: select
+#     options:
+#     - AL
+#     - AK
+#     - AZ
+#     - AR
+#     - CA
+#     - CO
+#     - CT
+#     - DE
+#     - FL
+#     - GA
+#     - HI
+#     - ID
+#     - IL
+#     - IN
+#     - IA
+#     - KS
+#     - KY
+#     - LA
+#     - ME
+#     - MD
+#     - MA
+#     - MI
+#     - MN
+#     - MS
+#     - MO
+#     - MT
+#     - NE
+#     - NV
+#     - NH
+#     - NJ
+#     - NM
+#     - NY
+#     - NC
+#     - ND
+#     - OH
+#     - OK
+#     - OR
+#     - PA
+#     - RI
+#     - SC
+#     - SD
+#     - TN
+#     - TX
+#     - UT
+#     - VT
+#     - VA
+#     - WA
+#     - WV
+#     - WI
+#     - WY
+#     - AB
+#     - BC
+#     - MB
+#     - NB
+#     - NL
+#     - NT
+#     - NS
+#     - NU
+#     - 'ON'
+#     - PE
+#     - QC
+#     - SK
+#     - YT
+#     label: 'State:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProvider_Address_Zip
+#     type: text
+#     label: 'Zip:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProvider_Address_Country
+#     type: text
+#     label: 'Country:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProvider_Phone
+#     type: text
+#     label: 'Phone Number:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: medicalProvider_Fax
+#     type: text
+#     label: 'Fax Number:'
+#     dependent:
+#       name: medicalProviderInformation
+#       value: 'Yes'
+#     note: true
+#     note_path: Event/notes
+#   - name: claimSubmissionMethod
+#     type: text
+#     label: Claim Submission Method
+#     default: LeaveLogic
+#     hidden: true
+#     readonly: true
+#     path: Event/claimSubmissionMethod
+#     note: true
+#     note_path: Event/notes
